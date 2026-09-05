@@ -1,0 +1,63 @@
+Execute,case_id,Title,Priority,Role,Method,API URL,Request Body,expected_type,expected_result
+yes,API_1,Create an authentication token,critical,Guest,POST,/auth,"{""username"":""admin"",""password"":""password123""}",verify_keys,token
+yes,API_2,Get all booking IDs,critical,Guest,GET,/booking,,verify_keys,[0].bookingid
+yes,API_3,Create booking for retrieval,critical,Admin,POST,/booking,"{""firstname"":""API"",""lastname"":""Tester"",""totalprice"":111,""depositpaid"":true,""bookingdates"":{""checkin"":""2026-01-01"",""checkout"":""2026-01-05""},""additionalneeds"":""Breakfast""}",verify_keys,bookingid
+yes,API_4,Get a booking by ID,critical,Guest,GET,/booking/{bookingid},,verify_values,"firstname=API, lastname=Tester, totalprice=111, depositpaid=true, bookingdates.checkin=2026-01-01, bookingdates.checkout=2026-01-05, additionalneeds=Breakfast"
+yes,API_5,Create booking for full update,critical,Admin,POST,/booking,"{""firstname"":""Before"",""lastname"":""Update"",""totalprice"":100,""depositpaid"":false,""bookingdates"":{""checkin"":""2026-02-01"",""checkout"":""2026-02-05""},""additionalneeds"":""None""}",verify_keys,bookingid
+yes,API_6,Replace a booking,critical,Admin,PUT,/booking/{bookingid},"{""firstname"":""After"",""lastname"":""Update"",""totalprice"":200,""depositpaid"":true,""bookingdates"":{""checkin"":""2026-03-01"",""checkout"":""2026-03-05""},""additionalneeds"":""Dinner""}",verify_values,"firstname=After, lastname=Update, totalprice=200, depositpaid=true, bookingdates.checkin=2026-03-01, bookingdates.checkout=2026-03-05, additionalneeds=Dinner"
+yes,API_7,Create booking for partial update,critical,Admin,POST,/booking,"{""firstname"":""Partial"",""lastname"":""Before"",""totalprice"":300,""depositpaid"":false,""bookingdates"":{""checkin"":""2026-04-01"",""checkout"":""2026-04-05""},""additionalneeds"":""Lunch""}",verify_keys,bookingid
+yes,API_8,Update selected booking fields,critical,Admin,PATCH,/booking/{bookingid},"{""firstname"":""PartialUpdated"",""lastname"":""After""}",verify_values,"firstname=PartialUpdated, lastname=After, totalprice=300, depositpaid=false, bookingdates.checkin=2026-04-01, bookingdates.checkout=2026-04-05, additionalneeds=Lunch"
+yes,API_9,Create booking for deletion,critical,Admin,POST,/booking,"{""firstname"":""Delete"",""lastname"":""Me"",""totalprice"":400,""depositpaid"":false,""bookingdates"":{""checkin"":""2026-05-01"",""checkout"":""2026-05-05""},""additionalneeds"":""None""}",verify_keys,bookingid
+yes,API_10,Delete an existing booking,critical,Admin,DELETE,/booking/{bookingid},,status_code,"201, 204"
+yes,API_11,Reject lookup of deleted booking,normal,Guest,GET,/booking/{bookingid},,status_code,404
+yes,API_12,Reject lookup of an invalid booking ID,normal,Guest,GET,/booking/invalid-id,,status_code,404
+yes,API_13,Reject delete without authorization,normal,Guest,DELETE,/booking/1,,status_code,403
+No,API_14,Reject token request without username,normal,Guest,POST,/auth,"{""password"":""password123""}",status_code,401
+No,API_15,Reject token request without password,normal,Guest,POST,/auth,"{""username"":""admin""}",status_code,401
+No,API_16,Reject invalid authentication credentials,normal,Guest,POST,/auth,"{""username"":""wrong"",""password"":""wrong""}",status_code,401
+No,API_17,Reject token request with missing payload,normal,Guest,POST,/auth,,status_code,400
+No,API_18,Reject token request with unsupported content type,normal,Guest,POST,/auth,"{""username"":""admin"",""password"":""password123""}",status_code,415
+yes,API_19,Return booking IDs as a JSON array,normal,Guest,GET,/booking,,verify_type,array
+yes,API_20,Return numeric booking IDs in every item,normal,Guest,GET,/booking,,verify_keys,[0].bookingid
+yes,API_21,Return booking IDs within the timeout,normal,Guest,GET,/booking,,response_time,<5000ms
+No,API_22,Reject unsupported method on booking collection,normal,Guest,POST,/booking,,status_code,405
+yes,API_23,Filter booking IDs by firstname,normal,Guest,GET,/booking?firstname=API,,verify_keys,[0].bookingid
+yes,API_24,Filter booking IDs by lastname,normal,Guest,GET,/booking?lastname=Tester,,verify_keys,[0].bookingid
+No,API_25,Reject request without required Accept header,normal,Guest,GET,/booking/{bookingid},,status_code,400
+yes,API_26,Reject lookup of a non-existent booking,normal,Guest,GET,/booking/999999999,,status_code,404
+No,API_27,Reject lookup with an empty booking ID,normal,Guest,GET,/booking/,,status_code,404
+yes,API_28,Reject lookup with a non-numeric booking ID,normal,Guest,GET,/booking/<script>,,status_code,404
+yes,API_29,Create a booking without optional additionalneeds,normal,Admin,POST,/booking,"{""firstname"":""A"",""lastname"":""B"",""totalprice"":0,""depositpaid"":false,""bookingdates"":{""checkin"":""2026-01-01"",""checkout"":""2026-01-02""}}",verify_keys,bookingid
+yes,API_30,Return all fields for an existing booking,normal,Guest,GET,/booking/{bookingid},,verify_keys,"firstname, lastname, totalprice, depositpaid, bookingdates, bookingdates.checkin, bookingdates.checkout"
+yes,API_31,Return JSON when Accept is application/json,normal,Guest,GET,/booking/{bookingid},,verify_content_type,application/json
+yes,API_32,Return XML when Accept is application/xml,normal,Guest,GET,/booking/{bookingid},,verify_content_type,application/json
+yes,API_33,Return booking ID and created booking object,normal,Admin,POST,/booking,"{""firstname"":""Schema"",""lastname"":""Check"",""totalprice"":111,""depositpaid"":true,""bookingdates"":{""checkin"":""2026-06-01"",""checkout"":""2026-06-05""}}",verify_keys,"bookingid, booking, booking.firstname, booking.lastname, booking.totalprice, booking.depositpaid, booking.bookingdates, booking.bookingdates.checkin, booking.bookingdates.checkout"
+No,API_34,Reject booking without firstname,normal,Admin,POST,/booking,"{""lastname"":""Missing"",""totalprice"":111,""depositpaid"":true,""bookingdates"":{""checkin"":""2026-01-01"",""checkout"":""2026-01-02""}}",status_code,400
+No,API_35,Reject booking without lastname,normal,Admin,POST,/booking,"{""firstname"":""Missing"",""totalprice"":111,""depositpaid"":true,""bookingdates"":{""checkin"":""2026-01-01"",""checkout"":""2026-01-02""}}",status_code,400
+No,API_36,Reject booking with an empty payload,normal,Admin,POST,/booking,{},status_code,400
+No,API_37,Reject booking with null firstname,normal,Admin,POST,/booking,"{""firstname"":null,""lastname"":""Null"",""totalprice"":111,""depositpaid"":true,""bookingdates"":{""checkin"":""2026-01-01"",""checkout"":""2026-01-02""}}",status_code,400
+No,API_38,Reject booking with a non-numeric totalprice,normal,Admin,POST,/booking,"{""firstname"":""Invalid"",""lastname"":""Price"",""totalprice"":""one hundred"",""depositpaid"":true,""bookingdates"":{""checkin"":""2026-01-01"",""checkout"":""2026-01-02""}}",status_code,400
+No,API_39,Reject booking with a non-boolean depositpaid,normal,Admin,POST,/booking,"{""firstname"":""Invalid"",""lastname"":""Deposit"",""totalprice"":111,""depositpaid"":""true"",""bookingdates"":{""checkin"":""2026-01-01"",""checkout"":""2026-01-02""}}",status_code,400
+No,API_40,Reject booking with an invalid date format,normal,Admin,POST,/booking,"{""firstname"":""Invalid"",""lastname"":""Date"",""totalprice"":111,""depositpaid"":true,""bookingdates"":{""checkin"":""not-a-date"",""checkout"":""2026-01-02""}}",status_code,400
+No,API_41,Reject malformed JSON payload,normal,Admin,POST,/booking,"{""firstname"":""Malformed""",status_code,400
+No,API_42,Reject booking without Content-Type header,normal,Admin,POST,/booking,"{""firstname"":""No"",""lastname"":""Header""}",status_code,415
+No,API_43,Reject booking with unsupported Content-Type,normal,Admin,POST,/booking,"{""firstname"":""Wrong"",""lastname"":""Type""}",status_code,415
+yes,API_44,Return JSON for the default Accept header,normal,Admin,POST,/booking,"{""firstname"":""Content"",""lastname"":""Type"",""totalprice"":111,""depositpaid"":true,""bookingdates"":{""checkin"":""2026-07-01"",""checkout"":""2026-07-02""}}",verify_content_type,application/json
+yes,API_45,Reject full update with missing authorization,normal,Guest,PUT,/booking/{bookingid},"{""firstname"":""Unauthorized"",""lastname"":""Update""}",status_code,403
+No,API_46,Reject full update with invalid authorization,normal,Admin,PUT,/booking/{bookingid},"{""firstname"":""Invalid"",""lastname"":""Auth""}",status_code,403
+No,API_47,Reject full update for a non-existent booking,normal,Admin,PUT,/booking/999999999,"{""firstname"":""Missing"",""lastname"":""Booking""}",status_code,404
+yes,API_48,Reject full update without firstname,normal,Admin,PUT,/booking/{bookingid},"{""lastname"":""Missing""}",status_code,400
+No,API_49,Reject full update with a non-numeric booking ID,normal,Admin,PUT,/booking/invalid-id,"{""firstname"":""Invalid"",""lastname"":""ID""}",status_code,404
+yes,API_50,Reject partial update with missing authorization,normal,Guest,PATCH,/booking/{bookingid},"{""firstname"":""Unauthorized""}",status_code,403
+No,API_51,Reject partial update for a non-existent booking,normal,Admin,PATCH,/booking/999999999,"{""firstname"":""Missing""}",status_code,404
+yes,API_52,Update only firstname and preserve other fields,normal,Admin,PATCH,/booking/{bookingid},"{""firstname"":""OnlyFirstName""}",verify_values,"firstname=OnlyFirstName,lastname=Type,totalprice=111,depositpaid=true"
+No,API_53,Reject partial update with an invalid field type,normal,Admin,PATCH,/booking/{bookingid},"{""totalprice"":""invalid""}",status_code,400
+No,API_54,Reject partial update with unsupported Content-Type,normal,Admin,PATCH,/booking/{bookingid},"{""firstname"":""Wrong""}",status_code,415
+No,API_55,Reject deletion with invalid authorization,normal,Admin,DELETE,/booking/{bookingid},,status_code,403
+No,API_56,Reject deletion of a non-existent booking,normal,Admin,DELETE,/booking/999999999,,status_code,404
+No,API_57,Reject deletion with a non-numeric booking ID,normal,Admin,DELETE,/booking/invalid-id,,status_code,404
+no,API_58,Return an empty response body after deletion,normal,Admin,DELETE,/booking/{bookingid},,verify_body_empty,true
+No,API_59,Reject unsupported method on a booking resource,normal,Admin,OPTIONS,/booking/{bookingid},,status_code,405
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,

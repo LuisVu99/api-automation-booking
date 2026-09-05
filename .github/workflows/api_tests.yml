@@ -1,0 +1,126 @@
+name: QA AI Automation
+
+concurrency:
+  group: api-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [master]
+
+  schedule:   #Run CI theo lịch
+    - cron: '0 0 * * 2' #Run at 7:00 am UTC+7 every Tuesday
+
+  workflow_dispatch:   #Run manually
+
+  push:
+    branches: [master]
+    tags:   #Run theo tag
+      - 'v*'
+
+  release:
+    types: [published] #Run khi release được publish
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: developer
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-py311-${{ hashFiles('requirements.txt') }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run test
+        id: test
+        run: pytest --clean-alluredir --alluredir=allure-results -v --tb=short
+        env:
+          API_BASE_URL: ${{ vars.API_BASE_URL }}
+          API_USERNAME: ${{ secrets.API_USERNAME }}
+          API_PASSWORD: ${{ secrets.API_PASSWORD }}
+          API_AUTH_PATH: ${{ vars.API_AUTH_PATH }}
+          API_TOKEN_JSON_PATH: token
+          REQUEST_TIMEOUT_SECONDS: 30
+          VERIFY_SSL: true
+
+      - name: Upload allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          if-no-files-found: warn
+
+  allure-report:
+    if: always() && needs.test.result != 'cancelled'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download allure results
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: allure-results
+          path: allure-results
+
+      - name: Checkout gh-pages history
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true
+
+      - name: Copy history (if exists)
+        run: |
+          mkdir -p allure-results/history
+          if [ -d gh-pages/history ]; then
+            cp -r gh-pages/history allure-results/ || true
+          fi
+
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Generate Allure Report
+        run: |
+          if find allure-results -maxdepth 1 -name '*-result.json' -print -quit | grep -q .; then
+            allure generate allure-results --clean -o allure-report
+          else
+            echo "No Allure result files were produced; skipping report generation."
+          fi
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+          if-no-files-found: warn
+
+      - name: Publish to GitHub Pages
+        if: github.event_name != 'pull_request' && hashFiles('allure-report/**') != ''
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          publish_branch: gh-pages

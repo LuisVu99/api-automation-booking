@@ -1,0 +1,3 @@
+PUT https://restful-booker.herokuapp.com/booking/4343
+Headers: {'User-Agent': 'python-requests/2.34.2', 'Accept-Encoding': 'gzip, deflate', 'Accept': 'application/json', 'Connection': 'keep-alive', 'Cookie': 'token=...***...773a', 'X-API-Role': 'Admin', 'Content-Length': '23', 'Content-Type': 'application/json'}
+Body: {'lastname': 'Missing'}

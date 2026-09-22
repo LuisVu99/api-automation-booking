@@ -7,6 +7,7 @@ import allure
 import requests
 
 from config.settings import Settings
+from utils.logger import sanitize_headers
 
 
 class BaseApi:
@@ -52,9 +53,10 @@ class BaseApi:
                 role=role,
                 _retry_auth=False,
             )
+        safe_headers = sanitize_headers(response.request.headers)
         allure.attach(
-            f"{method.upper()} {url}\nHeaders: {headers}\nBody: {json!r}",
-            name="Request",
+            f"{method.upper()} {url}\nHeaders: {safe_headers}\nBody: {json!r}",
+            name="Request Details",
             attachment_type=allure.attachment_type.TEXT,
         )
         allure.attach(
@@ -73,6 +75,14 @@ class BaseApi:
                 f"Expected HTTP status {expected}, received {response.status_code}: {response.text}"
             )
         return response
+
+    def login(self, role: str) -> str:
+        """Authenticate a role and return its cached token."""
+        self._login(role)
+        token = self.settings.auth_cache.get_token(role.strip().lower())
+        if not token:
+            raise AssertionError(f"Authentication did not cache a token for role {role!r}")
+        return token
 
     def _headers_for_role(self, role: str) -> dict[str, str]:
         """Resolve per-case authentication without leaking one role into another case."""

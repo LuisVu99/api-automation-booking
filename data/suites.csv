@@ -1,91 +1,91 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "Role: Guest
-Method: PUT
-URL: /booking/{bookingid}","133","Reject full update with missing authorization","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Admin
-Method: POST
-URL: /booking","107","Create booking for retrieval","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Admin
-Method: POST
-URL: /booking","127","Create booking for full update","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+Method: GET
+URL: /booking/{bookingid}","105","Return JSON when Accept is application/json","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking","141","Return numeric booking IDs in every item","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking","219","Return numeric booking IDs in every item","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Admin
+Method: POST
+URL: /booking","91","Create booking for retrieval","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking/{bookingid}","120","Return JSON when Accept is application/json","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking?lastname=Tester","112","Filter booking IDs by lastname","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Admin
 Method: DELETE
-URL: /booking/{bookingid}","132","Delete an existing booking","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/{bookingid}","109","Delete an existing booking","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Guest
+Method: POST
+URL: /auth","142","Create an authentication token","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Admin
+Method: POST
+URL: /booking","98","Return booking ID and created booking object","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Guest
+Method: PATCH
+URL: /booking/{bookingid}","96","Reject partial update with missing authorization","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Guest
+Method: PUT
+URL: /booking/{bookingid}","133","Reject full update with missing authorization","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Admin
+Method: POST
+URL: /booking","139","Create a booking without optional additionalneeds","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Admin
+Method: POST
+URL: /booking","133","Create booking for deletion","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Admin
+Method: PATCH
+URL: /booking/{bookingid}","127","Update only firstname and preserve other fields","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking/{bookingid}","129","Get a booking by ID","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/999999999","111","Reject lookup of a non-existent booking","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Guest
+Method: GET
+URL: /booking/<script>","106","Reject lookup with a non-numeric booking ID","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Guest
+Method: GET
+URL: /booking","225","Get all booking IDs","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Admin
+Method: PATCH
+URL: /booking/{bookingid}","134","Update selected booking fields","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
+"Role: Guest
+Method: GET
+URL: /booking/{bookingid}","126","Get a booking by ID","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: DELETE
-URL: /booking/1","110","Reject delete without authorization","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Guest
-Method: GET
-URL: /booking?lastname=Tester","109","Filter booking IDs by lastname","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Guest
-Method: PATCH
-URL: /booking/{bookingid}","101","Reject partial update with missing authorization","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/1","99","Reject delete without authorization","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Admin
 Method: POST
-URL: /booking","106","Create booking for partial update","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Admin
-Method: PATCH
-URL: /booking/{bookingid}","109","Update only firstname and preserve other fields","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking","112","Return JSON for the default Accept header","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Admin
 Method: POST
-URL: /booking","113","Return booking ID and created booking object","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Guest
-Method: GET
-URL: /booking/{bookingid}","141","Return all fields for an existing booking","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Guest
-Method: GET
-URL: /booking/999999999","103","Reject lookup of a non-existent booking","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Admin
-Method: POST
-URL: /booking","95","Return JSON for the default Accept header","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking","149","Create booking for full update","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Admin
 Method: PUT
-URL: /booking/{bookingid}","131","Replace a booking","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/{bookingid}","122","Replace a booking","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking/{bookingid}","110","Return XML when Accept is application/xml","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking?firstname=API","148","Filter booking IDs by firstname","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking","152","Get all booking IDs","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Guest
-Method: GET
-URL: /booking","139","Return booking IDs as a JSON array","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Guest
-Method: GET
-URL: /booking","126","Return booking IDs within the timeout","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/invalid-id","114","Reject lookup of an invalid booking ID","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Admin
 Method: POST
-URL: /booking","113","Create a booking without optional additionalneeds","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking","97","Create booking for partial update","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking/{bookingid}","127","Reject lookup of deleted booking","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/{bookingid}","149","Return all fields for an existing booking","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking/<script>","98","Reject lookup with a non-numeric booking ID","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Admin
-Method: PATCH
-URL: /booking/{bookingid}","94","Update selected booking fields","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/{bookingid}","120","Reject lookup of deleted booking","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking?firstname=API","112","Filter booking IDs by firstname","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
-"Role: Admin
-Method: POST
-URL: /booking","137","Create booking for deletion","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking","175","Return booking IDs as a JSON array","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Admin
 Method: PUT
-URL: /booking/{bookingid}","135","Reject full update without firstname","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/{bookingid}","128","Reject full update without firstname","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
 Method: GET
-URL: /booking/invalid-id","126","Reject lookup of an invalid booking ID","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+URL: /booking/{bookingid}","112","Return XML when Accept is application/xml","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
 "Role: Guest
-Method: POST
-URL: /auth","124","Create an authentication token","tests","2026-11-03","passed","2026-11-03","","test_users_ddt","",""
+Method: GET
+URL: /booking","177","Return booking IDs within the timeout","tests","2026-11-10","passed","2026-11-10","","test_users_ddt","",""
